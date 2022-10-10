@@ -7,7 +7,7 @@ def getCommitSha() {
   return readFile(".git/current-commit").trim()
 }
 
-def updateGithubCommitStatus(build) {
+def updateGithubCommitStatus() {
   // workaround https://issues.jenkins-ci.org/browse/JENKINS-38674
   repoUrl = getRepoURL()
   commitSha = getCommitSha()
@@ -20,8 +20,8 @@ def updateGithubCommitStatus(build) {
     statusResultSource: [
       $class: 'ConditionalStatusResultSource',
       results: [
-        [$class: 'BetterThanOrEqualBuildResult', result: 'SUCCESS', state: 'SUCCESS', message: build.description],
-        [$class: 'BetterThanOrEqualBuildResult', result: 'FAILURE', state: 'FAILURE', message: build.description],
+        [$class: 'BetterThanOrEqualBuildResult', result: 'SUCCESS', state: 'SUCCESS', message: "sucess"],
+        [$class: 'BetterThanOrEqualBuildResult', result: 'FAILURE', state: 'FAILURE', message: "failure"],
         [$class: 'AnyBuildResult', state: 'FAILURE', message: 'Loophole']
       ]
     ]
