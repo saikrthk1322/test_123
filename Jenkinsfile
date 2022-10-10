@@ -36,5 +36,10 @@ pipeline {
             }
         }
     }
+  post {
+    always{
+      updateGithubCommitStatus(build)
+    }
+  }
 }
 
