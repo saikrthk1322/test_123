@@ -38,10 +38,6 @@ pipeline {
             }
         }
     }
-  post {
-    always{
-      updateGithubCommitStatus()
-    }
   }
 }
 void setBuildStatus(String message, String state) {
