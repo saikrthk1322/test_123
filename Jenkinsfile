@@ -48,10 +48,10 @@ pipeline {
 void setBuildStatus(String message, String state) {
   step([
       $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "AnyDefinedRepositorySource", url: "https://github.com/saikrthk1322/test_123"],
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/saikrthk1322/test_123"],
       contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-      errorHandlers: [[$class: "ShallowAnyErrorHandler", result: "UNSTABLE"]],
-      statusResultSource: [ $class: "DefaultStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
   ]);
 }
 
