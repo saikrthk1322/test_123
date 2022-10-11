@@ -1,4 +1,4 @@
-/*def getRepoURL() {
+def getRepoURL() {
   sh "git config --get remote.origin.url > .git/remote-url"
   return readFile(".git/remote-url").trim()
 }
@@ -27,17 +27,8 @@ def updateGithubCommitStatus() {
       ]
     ]
   ])
-}*/
-def getRepoURL() {
-  sh "git config --get remote.origin.url > .git/remote-url"
-  return readFile(".git/remote-url").trim()
 }
-def getCommitSha() {
-  sh "git rev-parse HEAD > .git/current-commit"
-  return readFile(".git/current-commit").trim()
-   repoUrl = getRepoURL()
-  commitSha = getCommitSha()
-}
+
 pipeline {
     agent any
     stages {
@@ -47,16 +38,11 @@ pipeline {
             }
         }
     }
+  post{
+    always{
+      updateGithubCommitStatus()
+    }
+  }
   }
 
-void setBuildStatus(String message, String state) {
-  step([
-      $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
-      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
-  ]);
-}
 
-setBuildStatus("Build complete", "SUCCESS");
