@@ -74,6 +74,12 @@ pipeline {
                 echo 'new testing'
             }
         }
+	    stage('maven') {
+            steps {
+                echo 'maven testing'
+		 sh 'mvn clean install'
+            }
+        }
 
     }
 
