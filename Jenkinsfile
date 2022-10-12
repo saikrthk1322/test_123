@@ -75,10 +75,6 @@ pipeline {
     post {
         success {
             setBuildStatus("Build succeeded", "SUCCESS");
-		curl "https://github.com/saikrthk1322/test_123/statuses/$GIT_COMMIT?access_token=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" \
-  -H "Content-Type: application/json" \
-  -X POST \
-  -d "{\"state\": \"success\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \http://10.1.13.123:8080/job/test2/$BUILD_NUMBER/console\"}"
 		 }
         failure {
             setBuildStatus("Build failed", "FAILURE");
