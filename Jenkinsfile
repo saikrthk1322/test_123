@@ -69,6 +69,11 @@ pipeline {
                 echo 'Hello World'
             }
         }
+	stage('new') {
+            steps {
+                echo 'new testing'
+            }
+        }
 
     }
 
