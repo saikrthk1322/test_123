@@ -66,7 +66,7 @@ pipeline {
 	
 	    stage('checkoutscm'){
 		    steps{
-			    checkout([$class: 'GithubWeb', branches: [[name: '**']], extensions: [], userRemoteConfigs: [[credentialsId: 'saikrthk1322', url: 'https://github.com/saikrthk1322/test_123']]])
+			  checkout([$class: 'GitSCM', branches: [[name: '**']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.com/saikrthk1322/test_123'], extensions: [], userRemoteConfigs: [[credentialsId: 'saikrthk1322', url: 'https://github.com/saikrthk1322/test_123']]])
 		    }
 	    }
 	    
