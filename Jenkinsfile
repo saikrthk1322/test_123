@@ -48,10 +48,10 @@ pipeline {
 void setBuildStatus(String message, String state) {
   step([
       $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "AnyDefinedRepositorySource", url: "https://github.com/saikrthk1322/test_123"],
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/saikrthk1322/test_123"],
       contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-      errorHandlers: [[$class: "ShallowAnyErrorHandler", result: "UNSTABLE"]],
-      statusResultSource: [ $class: "DefaultStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
   ]);
 }
 
@@ -63,10 +63,27 @@ pipeline {
     }
 
     stages {
-
+	
+	    stage('checkoutscm'){
+		    steps{
+			  checkout([$class: 'GitSCM', branches: [[name: '**']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.com/saikrthk1322/test_123'], extensions: [], userRemoteConfigs: [[credentialsId: 'saikrthk1322', url: 'https://github.com/saikrthk1322/test_123']]])
+		    }
+	    }
+	    
         stage('Hello') {
             steps {
                 echo 'Hello World'
+            }
+        }
+	stage('new') {
+            steps {
+                echo 'new testing'
+            }
+        }
+	    stage('maven') {
+            steps {
+                echo 'maven testing'
+		 sh 'mvn clean install'
             }
         }
 
@@ -75,7 +92,7 @@ pipeline {
     post {
         success {
             setBuildStatus("Build succeeded", "SUCCESS");
-        }
+		 }
         failure {
             setBuildStatus("Build failed", "FAILURE");
         }
